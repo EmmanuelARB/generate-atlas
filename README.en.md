@@ -25,6 +25,31 @@ directory:
 | **Codex CLI** | `~/.codex/skills/atlas-generate/` | `.codex/skills/atlas-generate/` |
 | **Cursor** | `~/.cursor/skills/atlas-generate/` | `.cursor/skills/atlas-generate/` |
 
+### Via Pi packages (recommended — updates managed by Pi)
+
+The repo is also a **Pi package** (thanks to `package.json`), so Pi can clone it from GitHub and
+update it like a git-installed extension:
+
+```sh
+pi install git:github.com/<your-user>/generate-atlas          # follows the default branch
+pi install git:github.com/<your-user>/generate-atlas@main     # follows main explicitly
+pi install git:github.com/<your-user>/generate-atlas@v1.0.0   # pinned to a tag (never moves)
+
+pi list                                                        # installed packages
+pi update --extensions                                         # update ALL packages (incl. atlas)
+pi update git:github.com/<your-user>/generate-atlas            # update one package
+pi remove git:github.com/<your-user>/generate-atlas            # uninstall
+```
+
+`pi update` reconciles the git checkout: **without a pinned ref (tag/commit) it follows the
+default branch**; with a tag or commit the version stays pinned. For one project only:
+`pi install -l git:github.com/<your-user>/generate-atlas` (writes to `.pi/settings.json`).
+Try without installing: `pi -e git:github.com/<your-user>/generate-atlas`. In Pi, run `/reload`
+after an update.
+
+> Claude Code / Codex / Cursor have no skill package manager: keep a local clone up to date
+> (`git pull`) and re-run `./install.sh` (symlinks point at the clone), e.g. from a cron.
+
 Quick install script: `./install.sh` (add `--all`, `--project`, `--copy` as needed).
 
 ```sh
@@ -33,6 +58,12 @@ ln -s "$PWD/generate-atlas/atlas-generate" ~/.pi/agent/skills/atlas-generate
 ```
 
 In Pi, run `/reload` if a session is already open.
+
+## Updates
+
+- **Pi (git package)**: `pi update --extensions` (or `pi update git:github.com/<your-user>/generate-atlas`),
+  then `/reload` in the session.
+- **Other tools**: `git -C /path/to/generate-atlas pull` then `./install.sh`.
 
 ## Usage
 

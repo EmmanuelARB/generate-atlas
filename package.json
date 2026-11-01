@@ -1,0 +1,17 @@
+{
+  "name": "generate-atlas",
+  "version": "1.0.0",
+  "description": "Skill Agent Skills 100 % read-only : génère dans le chat un unique document Markdown autoportant (FR par défaut) qui résume le dossier courant, pour alimenter une base de connaissances personnelle.",
+  "license": "MIT",
+  "keywords": [
+    "pi-package",
+    "agent-skills",
+    "skill",
+    "atlas",
+    "knowledge-base",
+    "summary"
+  ],
+  "pi": {
+    "skills": ["./atlas-generate"]
+  }
+}
