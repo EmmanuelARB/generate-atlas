@@ -54,7 +54,7 @@ pi remove git:github.com/EmmanuelARB/generate-atlas    # désinstaller
 ```
 
 - `pi update` « reconcilie » le clone git : **sans ref figé (tag/commit), il suit la branche par
-  défaut** (`@main` suit `main`) ; avec un tag ou un commit, la version reste épinglée.
+  défaut** (`@master` suit `master`) ; avec un tag ou un commit, la version reste épinglée.
 - Pour un seul projet : `pi install -l git:github.com/EmmanuelARB/generate-atlas` écrit la
   déclaration dans `.pi/settings.json` (chargée après avoir fait confiance au projet).
 - Test sans rien installer : `pi -e git:github.com/EmmanuelARB/generate-atlas`.
