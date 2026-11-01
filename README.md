@@ -40,23 +40,23 @@ le mettre à jour comme une extension installée via git :
 
 ```sh
 # install (suit la branche par défaut du repo) :
-pi install git:github.com/EmmanuelARB/generate-atlas
+pi install https://github.com/EmmanuelARB/generate-atlas
 # ou explicitement sur la branche master :
-pi install git:github.com/EmmanuelARB/generate-atlas@master
+pi install https://github.com/EmmanuelARB/generate-atlas@master
 # version figée sur un tag — ne bougera plus :
-pi install git:github.com/EmmanuelARB/generate-atlas@v1.0.0
+pi install https://github.com/EmmanuelARB/generate-atlas@v1.0.0
 
 pi list                                               # packages installés
 pi update --extensions                                # met à jour TOUS les packages (dont atlas)
-pi update git:github.com/EmmanuelARB/generate-atlas    # un seul package
-pi remove git:github.com/EmmanuelARB/generate-atlas    # désinstaller
+pi update https://github.com/EmmanuelARB/generate-atlas    # un seul package
+pi remove https://github.com/EmmanuelARB/generate-atlas    # désinstaller
 ```
 
 - `pi update` « reconcilie » le clone git : **sans ref figé (tag/commit), il suit la branche par
   défaut** (`@master` suit `master`) ; avec un tag ou un commit, la version reste épinglée.
-- Pour un seul projet : `pi install -l git:github.com/EmmanuelARB/generate-atlas` écrit la
+- Pour un seul projet : `pi install -l https://github.com/EmmanuelARB/generate-atlas` écrit la
   déclaration dans `.pi/settings.json` (chargée après avoir fait confiance au projet).
-- Test sans rien installer : `pi -e git:github.com/EmmanuelARB/generate-atlas`.
+- Test sans rien installer : `pi -e https://github.com/EmmanuelARB/generate-atlas`.
 - Dans Pi, fais `/reload` après une mise à jour pour recharger le skill.
 
 > Claude Code / Codex / Cursor n'ont pas de gestionnaire de packages de skills : le plus simple
@@ -94,7 +94,7 @@ Dans Pi, recharge les skills si une session est déjà ouverte : `/reload`.
 
 ## Mise à jour
 
-- **Pi (package git)** : `pi update --extensions` (ou `pi update git:github.com/EmmanuelARB/generate-atlas`),
+- **Pi (package git)** : `pi update --extensions` (ou `pi update https://github.com/EmmanuelARB/generate-atlas`),
   puis `/reload` dans la session. Voir la section « packages Pi » ci-dessus pour le choix
   branche suivie vs tag épinglé.
 - **Autres outils** : `git -C /chemin/vers/generate-atlas pull` puis `./install.sh` (les symlinks
