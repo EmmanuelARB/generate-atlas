@@ -5,11 +5,13 @@ description: >-
   (repo, base de connaissances, projet quelconque) : résumé exécutif, à quoi il sert, stack,
   architecture, points d'entrée, dépendances, commandes utiles, conventions, tests/CI,
   points d'attention et index des fichiers clés — prêt à être copié tel quel dans une base de
-  connaissances personnelle. 100 % READ-ONLY : n'écrit, ne modifie et ne supprime aucun
-  fichier (tout temporaire éventuel est supprimé avant la fin). Langue : français par défaut,
-  sauf demande explicite contraire (ex. `/skill:atlas-generate in english`). À utiliser dès que
-  l'utilisateur demande un résumé / une fiche / un « atlas » / un condensé du dossier courant
-  ou d'un projet pour alimenter sa base de connaissances.
+  connaissances personnelle. Cible : dossier courant par défaut, ou repo git distant si une URL
+  est passée en argument (ex. `/skill:atlas-generate https://github.com/user/repo` — clone
+  superficiel temporaire, supprimé ensuite). 100 % READ-ONLY : n'écrit, ne modifie et ne supprime
+  aucun fichier (tout temporaire éventuel est supprimé avant la fin). Langue : français par
+  défaut, sauf demande explicite contraire (ex. `/skill:atlas-generate in english`). À utiliser
+  dès que l'utilisateur demande un résumé / une fiche / un « atlas » / un condensé du dossier
+  courant ou d'un projet pour alimenter sa base de connaissances.
 license: MIT
 metadata:
   author: dqdev
@@ -19,7 +21,8 @@ metadata:
 # Atlas Generate
 
 Ta mission : produire **dans le chat** un unique document Markdown **autoportant** qui résume le
-dossier courant, destiné à être copié tel quel dans une base de connaissances personnelle.
+dossier courant — ou un repo git distant si une URL est passée en argument —, destiné à être
+copié tel quel dans une base de connaissances personnelle.
 
 ## 1. Contrat absolu : lecture seule (read-only)
 
@@ -28,10 +31,16 @@ dossier courant, destiné à être copié tel quel dans une base de connaissance
 - N'utilise **aucun outil d'écriture** (write/edit/patch) et **aucune commande qui modifie
   l'état** du projet ou du système (pas d'install, de build, de migration, de `git commit`,
   de `git checkout`, etc.). Lecture seule : lister, lire, chercher (grep), `git log`/`git status`.
-- Si des fichiers temporaires ont été créés pendant l'analyse, **supprime-les avant de terminer**.
+- **Seule exception autorisée** : si une URL a été passée en argument (section 2.2), un
+  `git clone --depth 1` strictement dans un répertoire temporaire système (`mktemp -d`), sans
+  submodules, et sans exécuter aucun code du repo cloné.
+- Si des fichiers temporaires ont été créés pendant l'analyse (ex. le clone), **supprime-les
+  avant de terminer, même en cas d'erreur** (`rm -rf` du répertoire temporaire).
 - Si tu t'apprêtes à écrire un fichier : arrête-toi. Ce skill ne produit que du texte dans le chat.
 
-## 2. Langue de sortie
+## 2. Arguments de la commande
+
+### 2.1 Langue de sortie
 
 - **Français par défaut** pour tout le document (titres de sections, explications, commentaires).
 - Si l'utilisateur demande explicitement une autre langue — argument après la commande
@@ -40,9 +49,29 @@ dossier courant, destiné à être copié tel quel dans une base de connaissance
 - Les noms de fichiers, chemins, commandes, symboles et extraits de code restent **inchangés**
   quelle que soit la langue.
 
+### 2.2 Cible : dossier courant ou URL de repo git
+
+- **Par défaut** (aucun argument, ou argument = langue) : la racine analysée est le **dossier
+  courant**.
+- Si un argument ressemble à une URL de repo git (`https://…`, `http://…`, `git@…:…`, ou se
+  termine par `.git`) — ex. `/skill:atlas-generate https://github.com/user/repo` — alors :
+  1. Crée un répertoire temporaire et clone en superficiel, **sans submodules** :
+     `TMP=$(mktemp -d)` puis `git clone --depth 1 "<URL>" "$TMP/repo"`.
+  2. La racine analysée devient `$TMP/repo` (mêmes règles d'exploration, section 3).
+  3. Le nom du « dossier racine » pour le titre est le dernier segment de l'URL, sans `.git`.
+  4. Dans le résumé exécutif, indique la source en première ligne :
+     « Source : `<URL>` (clone superficiel `--depth 1`, branche par défaut). »
+  5. **Nettoyage obligatoire avant de répondre** : `rm -rf "$TMP"`, même si l'analyse échoue.
+- Si le clone échoue (URL invalide, repo privé, pas de réseau…) : réponds en une phrase que le
+  clone a échoué et pourquoi ; **ne produis pas de document**.
+- Les arguments se combinent : `/skill:atlas-generate https://github.com/user/repo in english`.
+- Ne traite jamais une URL comme un chemin local ; seules les URLs de repos git sont supportées
+  (pas de page web non git).
+
 ## 3. Méthode d'exploration (read-only uniquement)
 
-1. La racine analysée est le **dossier courant**. Liste d'abord l'arborescence complète.
+1. La racine analysée est le **dossier courant**, ou le **clone temporaire de l'URL** si un
+   argument URL a été donné (section 2.2). Liste d'abord l'arborescence complète.
 2. **Exclusions par défaut** : `.git`, `node_modules`, `dist`, `build`, `out`, `.next`, `.nuxt`,
    `.output`, `coverage`, `__pycache__`, `.pytest_cache`, `.mypy_cache`, `.ruff_cache`, `.venv`,
    `venv`, `env`, `.tox`, `.idea`, `.vscode`, `*.egg-info`, `target`, `vendor`, `bower_components`,
@@ -82,7 +111,7 @@ dossier courant, destiné à être copié tel quel dans une base de connaissance
 # Atlas — <nom du dossier racine>
 
 ## 1. Résumé exécutif
-(5–10 lignes : ce que c'est, pourquoi, pour qui, état général)
+(5–10 lignes : ce que c'est, pourquoi, pour qui, état général ; si cible = URL, première ligne = « Source : <URL> »)
 
 ## 2. À quoi sert ce projet
 

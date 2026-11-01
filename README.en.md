@@ -2,8 +2,9 @@
 
 Portable [Agent Skills](https://agentskills.io) skill (Pi, Claude Code, Codex, Cursor, …) that
 outputs **in the chat** a single **self-contained Markdown document** summarizing the current
-directory — repo, knowledge base, any project — ready to be pasted as-is into your personal
-knowledge base.
+directory — repo, knowledge base, any project — or a remote git repo passed as an argument
+(`/skill:atlas-generate https://github.com/user/repo`) — ready to be pasted as-is into your
+personal knowledge base.
 
 - **100 % read-only**: the skill never writes, modifies or deletes any file (any temporary file is
   removed before finishing). The output is one `markdown` code block in the conversation.
@@ -93,7 +94,12 @@ In Pi, run `/reload` if a session is already open.
 ## Usage
 
 - `/skill:atlas-generate` (Pi) or `/atlas-generate` (depending on the tool)
+- From a URL: `/skill:atlas-generate https://github.com/user/repo` — the skill shallow-clones the
+  repo (`--depth 1`, no submodules) into a temp directory, analyzes it, then deletes the clone.
+  Handy to summarize someone else's project without installing anything. (First time, your tool
+  may ask permission to run `git clone`.)
 - Language override: `/skill:atlas-generate in english`
+  (combinable with a URL: `/skill:atlas-generate https://github.com/user/repo in english`)
 - Natural invocation: "summarize this directory", "I want to add this repo to my knowledge base"
 
 The agent explores the current directory (excluding `.git`, `node_modules`, `dist`, binaries,

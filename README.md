@@ -2,8 +2,9 @@
 
 Skill [Agent Skills](https://agentskills.io) portable (Pi, Claude Code, Codex, Cursor, …) qui
 génère **dans le chat** un unique document Markdown **autoportant** résumant le dossier courant —
-repo, base de connaissances, projet quelconque — prêt à être copié tel quel dans ta base de
-connaissances personnelle.
+repo, base de connaissances, projet quelconque — ou un repo git distant passé en argument
+(`/skill:atlas-generate https://github.com/user/repo`) — prêt à être copié tel quel dans ta base
+de connaissances personnelle.
 
 - **100 % read-only** : le skill n'écrit, ne modifie et ne supprime **aucun fichier** (les
   temporaires éventuels sont supprimés avant la fin). Le résultat est un seul bloc `markdown`
@@ -113,7 +114,12 @@ Dans Pi, recharge les skills si une session est déjà ouverte : `/reload`.
 ## Utilisation
 
 - **Commande explicite** : `/skill:atlas-generate` (dans Pi), ou `/atlas-generate` (selon l'outil).
+- **Depuis une URL** : `/skill:atlas-generate https://github.com/user/repo` — le skill clone le
+  repo en superficiel (`--depth 1`, sans submodules) dans un répertoire temporaire, l'analyse,
+  puis supprime le clone. Pratique pour résumer le projet d'un tiers sans rien installer.
+  (La première fois, ton outil peut demander l'autorisation d'exécuter `git clone`.)
 - **Langue** : `/skill:atlas-generate in english`, `/skill:atlas-generate en espagnol`, …
+  (combinable avec une URL : `/skill:atlas-generate https://github.com/user/repo in english`)
 - **Invocation naturelle** (le skill se déclenche tout seul quand c'est pertinent) :
   « Fais-moi un résumé de ce dossier », « Je veux mettre ce repo dans ma base de connaissances ».
 
