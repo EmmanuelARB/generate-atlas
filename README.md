@@ -20,7 +20,6 @@ connaissances personnelle.
 ```
 atlas-generate/
 └── SKILL.md      ← le skill (frontmatter Agent Skills + instructions + template imposé)
-install.sh        ← installe le skill pour Pi / Claude Code / Codex / Cursor (symlink ou copie)
 LICENSE           ← MIT
 ```
 
@@ -30,10 +29,11 @@ tests/CI/déploiement, points d'attention, index des fichiers clés).
 
 ## Installation
 
-Le skill n'est qu'un dossier contenant `SKILL.md` : il suffit de le placer (copie ou symlink)
-dans le dossier « skills » de ton outil.
+Le skill n'est qu'un dossier contenant `SKILL.md` : il suffit de le placer dans le dossier
+« skills » de ton outil — idéalement par **lien symbolique** vers un clone local (voir
+« Mise à jour » pour l'intérêt).
 
-### Via les packages Pi (recommandé — mises à jour gérées par Pi)
+### Pi — via les packages (recommandé : mises à jour gérées par Pi)
 
 Le repo est aussi un **package Pi** (grâce à `package.json`) : Pi peut le cloner depuis GitHub et
 le mettre à jour comme une extension installée via git :
@@ -59,20 +59,31 @@ pi remove https://github.com/EmmanuelARB/generate-atlas    # désinstaller
 - Test sans rien installer : `pi -e https://github.com/EmmanuelARB/generate-atlas`.
 - Dans Pi, fais `/reload` après une mise à jour pour recharger le skill.
 
-> Claude Code / Codex / Cursor n'ont pas de gestionnaire de packages de skills : le plus simple
-> reste de garder un clone local à jour (`git pull`) et de relancer `./install.sh` (resymlink),
-> éventuellement via un cron.
+### Claude Code, Codex, Cursor, standard Agent Skills
 
-### Méthode rapide (script)
+Ces harnais n'ont pas de gestionnaire de packages de skills : on clone le repo **une fois**, puis
+on pointe chaque dossier « skills » vers ce clone par **lien symbolique** — ainsi, un seul
+`git pull` met à jour tous ces outils d'un coup (voir « Mise à jour ») :
 
 ```sh
-./install.sh            # installe en "user" pour Pi + emplacements détectés (crée ~/.pi et ~/.agents si besoin)
-./install.sh --all      # force tous les emplacements user connus (Pi, Agent Skills, Claude Code, Codex, Cursor)
-./install.sh --project  # installe dans le dossier courant (skills projet)
-./install.sh --copy     # copie au lieu de faire un lien symbolique
+# 1. clone local (une seule fois)
+git clone https://github.com/EmmanuelARB/generate-atlas.git ~/generate-atlas
+
+# 2. liens symboliques (installation « user » = tous tes projets)
+mkdir -p ~/.claude/skills ~/.codex/skills ~/.cursor/skills ~/.agents/skills
+ln -s ~/generate-atlas/atlas-generate ~/.claude/skills/atlas-generate    # Claude Code
+ln -s ~/generate-atlas/atlas-generate ~/.codex/skills/atlas-generate     # Codex CLI
+ln -s ~/generate-atlas/atlas-generate ~/.cursor/skills/atlas-generate    # Cursor
+ln -s ~/generate-atlas/atlas-generate ~/.agents/skills/atlas-generate    # standard Agent Skills (aussi lu par Pi)
 ```
 
-### Méthode manuelle (un seul dossier à placer)
+> Installation « projet » (un seul dossier) : remplace `~/.<outil>/skills/` par `./.<outil>/skills/`
+> dans le dossier du projet (ex. `.claude/skills/atlas-generate`).
+
+Variante **copie** (figée, à recopier à chaque mise à jour) au lieu de symlink :
+`cp -R ~/generate-atlas/atlas-generate ~/.claude/skills/atlas-generate`
+
+Emplacements attendus par outil :
 
 | Outil | Emplacement « user » (tous projets) | Emplacement « projet » (dossier courant) |
 |---|---|---|
@@ -82,23 +93,22 @@ pi remove https://github.com/EmmanuelARB/generate-atlas    # désinstaller
 | **Codex CLI** | `~/.codex/skills/atlas-generate/` | `.codex/skills/atlas-generate/` |
 | **Cursor** | `~/.cursor/skills/atlas-generate/` | `.cursor/skills/atlas-generate/` |
 
-Exemple (Pi, installation user) :
-
-```sh
-git clone https://github.com/EmmanuelARB/generate-atlas.git
-ln -s "$PWD/generate-atlas/atlas-generate" ~/.pi/agent/skills/atlas-generate
-# ou : cp -r atlas-generate ~/.pi/agent/skills/
-```
-
+Pour Pi sans package (installation manuelle), le lien se fait vers `~/.pi/agent/skills/atlas-generate`.
 Dans Pi, recharge les skills si une session est déjà ouverte : `/reload`.
 
 ## Mise à jour
 
-- **Pi (package git)** : `pi update --extensions` (ou `pi update https://github.com/EmmanuelARB/generate-atlas`),
-  puis `/reload` dans la session. Voir la section « packages Pi » ci-dessus pour le choix
-  branche suivie vs tag épinglé.
-- **Autres outils** : `git -C /chemin/vers/generate-atlas pull` puis `./install.sh` (les symlinks
-  pointent vers le clone, donc ils sont à jour dès le pull).
+- **Pi (package)** : `pi update --extensions` (ou `pi update https://github.com/EmmanuelARB/generate-atlas`),
+  puis `/reload` dans la session. Sans ref figé, la branche par défaut est suivie ; avec
+  `@v1.0.0`, la version reste épinglée.
+- **Claude Code / Codex / Cursor / Agent Skills** : les skills étant des **symlinks vers le clone
+  local**, une seule commande met à jour tous ces harnais d'un coup :
+  ```sh
+  git -C ~/generate-atlas pull
+  ```
+  (aucun rechargement au prochain lancement ; `/reload` dans Pi si une session est ouverte).
+  Ce `git pull` peut aussi tourner en cron pour une mise à jour automatique. Avec une
+  installation par **copie**, il faut recopier le dossier à chaque fois — d'où l'intérêt du symlink.
 
 ## Utilisation
 
