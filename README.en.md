@@ -32,7 +32,7 @@ update it like a git-installed extension:
 
 ```sh
 pi install git:github.com/EmmanuelARB/generate-atlas          # follows the default branch
-pi install git:github.com/EmmanuelARB/generate-atlas@main     # follows main explicitly
+pi install git:github.com/EmmanuelARB/generate-atlas@master     # follows master explicitly
 pi install git:github.com/EmmanuelARB/generate-atlas@v1.0.0   # pinned to a tag (never moves)
 
 pi list                                                        # installed packages

@@ -42,8 +42,8 @@ le mettre à jour comme une extension installée via git :
 ```sh
 # install (suit la branche par défaut du repo) :
 pi install git:github.com/EmmanuelARB/generate-atlas
-# ou explicitement sur la branche main :
-pi install git:github.com/EmmanuelARB/generate-atlas@main
+# ou explicitement sur la branche master :
+pi install git:github.com/EmmanuelARB/generate-atlas@master
 # version figée sur un tag — ne bougera plus :
 pi install git:github.com/EmmanuelARB/generate-atlas@v1.0.0
 
