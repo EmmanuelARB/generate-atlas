@@ -122,15 +122,25 @@ dossier courant, destiné à être copié tel quel dans une base de connaissance
 - Langue du document : <français | langue demandée>
 ```
 
-## 6. Format de la réponse finale
+## 6. Format de la réponse finale — affichage en texte BRUT
+
+Le document doit apparaître dans le chat en **texte brut** (les `#`, `**`, `-` restent visibles
+tels quels), jamais interprété. Or tout Markdown émis hors d'un bloc de code est affiché rendu
+par le chat (gros titres, gras, listes) : pour obtenir le brut, le document entier doit tenir
+dans un unique bloc de code.
 
 1. Une courte phrase d'intro, ex. : « Voici l'atlas du dossier `nom-du-dossier` : »
-2. **Un seul bloc de code** ` ```markdown ` contenant le document complet, copiable tel quel
-   dans un fichier `.md`.
-3. Une seule phrase de clôture, ex. : « Document prêt à être copié dans ta base de
-   connaissances — aucun fichier n'a été écrit. »
-4. **Rien d'autre après.** Ne propose pas d'écrire le fichier : ce skill ne produit que du texte
-   dans le chat.
+2. **Un seul bloc de code** contenant le document complet, ouvert par une rangée de **quatre
+   backticks** suivie de `markdown`, et fermé par quatre backticks — jamais trois, car le
+   document contient lui-même des blocs de code à trois backticks (ex. « Commandes utiles »),
+   ce qui fermerait prématurément le bloc.
+3. **Règle absolue** : aucune ligne du document ne sort de ce bloc de code. Ne jamais émettre
+   le document en Markdown nu hors bloc : il serait affiché rendu et ne serait plus copiable
+   tel quel en brut.
+4. Une seule phrase de clôture, ex. : « Document brut prêt à être copié tel quel dans ta base
+   de connaissances — aucun fichier n'a été écrit. »
+5. **Rien d'autre après.** Ne propose pas d'écrire le fichier : ce skill ne produit que du
+   texte dans le chat.
 
 ## 7. Ne bloque pas
 
