@@ -26,8 +26,7 @@ LICENSE           ← MIT
 
 Le document généré suit un template fixe (résumé exécutif, à quoi sert le projet, stack,
 architecture annotée, points d'entrée, dépendances & config, commandes utiles, conventions,
-tests/CI/déploiement, points d'attention, index des fichiers clés, métadonnées avec branche et
-commit git).
+tests/CI/déploiement, points d'attention, index des fichiers clés).
 
 ## Installation
 
@@ -117,8 +116,6 @@ quel dans un fichier `.md` de ta KB. Aucun fichier n'est écrit.
 ```markdown
 # Atlas — mon-projet
 
-> Fiche autoportante générée le 2025-01-15 par le skill `atlas-generate`.
-
 ## 1. Résumé exécutif
 ...
 ## 7. Commandes utiles
@@ -127,11 +124,6 @@ npm install
 npm run dev
 ```
 ...
-## 12. Métadonnées
-- Dossier analysé : `mon-projet`
-- Git : branche `main`, commit `a1b2c3d`
-- Portée : complet (312 fichiers lus)
-- Langue du document : français
 ```
 
 ## Licence

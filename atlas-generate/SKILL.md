@@ -57,8 +57,7 @@ dossier courant, destiné à être copié tel quel dans une base de connaissance
    `index.*`, `app.*`, `cli.*`, `server.*`, `cmd/`, `src/index.*`, `bin/`...).
 5. Ensuite, parcours les dossiers par ordre d'importance : d'abord les fichiers les plus
    centraux, puis un **échantillon représentatif** par sous-dossier. Si le volume est trop grand
-   pour tout lire, fais un résumé sur échantillon intelligent et marque `portée: échantillon`
-   dans les métadonnées.
+   pour tout lire, fais un résumé sur échantillon intelligent.
 6. Si c'est un repo git (commandes read-only) : branche courante et dernier commit
    (`git rev-parse --abbrev-ref HEAD`, `git log -1 --pretty=format:'%h %ad %s' --date=short`,
    `git status --porcelain | head`).
@@ -81,9 +80,6 @@ dossier courant, destiné à être copié tel quel dans une base de connaissance
 
 ```markdown
 # Atlas — <nom du dossier racine>
-
-> Fiche autoportante générée le <AAAA-MM-JJ> par le skill `atlas-generate`.
-> Lisible sans aucun contexte externe. Aucun fichier n'a été écrit pour la produire.
 
 ## 1. Résumé exécutif
 (5–10 lignes : ce que c'est, pourquoi, pour qui, état général)
@@ -113,13 +109,6 @@ dossier courant, destiné à être copié tel quel dans une base de connaissance
 
 ## 11. Index des fichiers clés
 (tableau : `chemin` → rôle en une ligne)
-
-## 12. Métadonnées
-- Dossier analysé : `<nom>`
-- Généré le : <AAAA-MM-JJ>
-- Git : branche `<branche>`, commit `<hash court>`, statut `<propre / N fichiers modifiés>` (si repo git)
-- Portée : `complet` ou `échantillon` (+ nombre approximatif de fichiers/lignes lus)
-- Langue du document : <français | langue demandée>
 ```
 
 ## 6. Format de la réponse finale — affichage en texte BRUT
